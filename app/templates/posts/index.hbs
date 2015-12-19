@@ -1,0 +1,5 @@
+<ul>
+    {{#each model as |post|}}
+    <li style="text-transform: capitalize;">{{#link-to "posts.post" post}}{{post.title}}{{/link-to}}</li>
+    {{/each}}
+</ul>
