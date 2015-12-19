@@ -4,13 +4,8 @@
     Use this project to learn about the core concepts that power the Ember framework.
 </p>
 
-{{#each model as |post|}}
-    <h2>{{post.title}}</h2>
-    <p>By: {{post.author}}</p>
-    <p>Date: {{post.date}}</p>
-    <p>
-        {{post.content}}
-    </p>
+{{#each model as |postObject|}}
+    {{post-listing post=postObject}}
 {{/each}}
 
 {{#link-to "about"}}About Us{{/link-to}}

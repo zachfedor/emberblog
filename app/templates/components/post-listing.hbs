@@ -1,0 +1,15 @@
+<h2 style="text-transform: capitalize;">{{post.title}}</h2>
+<p>By: {{post.author}}</p>
+<p>Date: {{post.date}}</p>
+<button {{action "toggleContent"}}>
+    {{#if showContent}}
+    Hide Content
+    {{else}}
+    Show Content
+    {{/if}}
+</button>
+{{#if showContent}}
+<p>
+    {{post.content}}
+</p>
+{{/if}}
