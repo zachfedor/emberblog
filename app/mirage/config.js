@@ -1,34 +1,24 @@
 export default function() {
-    this.get('/posts', function() {
+    this.get('/posts', function(db) {
         return {
-            data: [{
+            data: db.posts.map(attrs => ({
                 type: 'posts',
-                id: 1,
-                attributes: {
-                    title: "Hello World",
-                    author: "Zach Fedor",
-                    date: "2015.12.15",
-                    content: "This is our first post."
-                }
-            }, {
+                id: attrs.id,
+                attributes: attrs
+            }))
+        };
+    });
+
+    this.get('/posts/:id', function(db, request) {
+        let id = request.params.id;
+        console.log('mirage find a post');
+
+        return {
+            data: {
                 type: 'posts',
-                id: 2,
-                attributes: {
-                    title: "Second Post",
-                    author: "Zach Fedor",
-                    date: "2015.12.16",
-                    content: "This is our second post."
-                }
-            }, {
-                type: 'posts',
-                id: 3,
-                attributes: {
-                    title: "We're Done",
-                    author: "Zach Fedor",
-                    date: "2015.12.17",
-                    content: "It was a good run, but we quit."
-                }
-            }]
+                id: id,
+                attributes: db.posts.find(id)
+            }
         };
     });
 }
