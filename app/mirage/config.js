@@ -9,6 +9,18 @@ export default function() {
         };
     });
 
+    this.post('/posts', function(db, request) {
+        var attrs = JSON.parse(request.requestBody).post;
+        var post = db.posts.insert(attrs);
+        return {
+            data: {
+                type: 'posts',
+                id: post.id,
+                attributes: post
+            }
+        };
+    });
+
     this.get('/posts/:id', function(db, request) {
         let id = request.params.id;
         console.log('mirage find a post');

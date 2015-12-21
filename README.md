@@ -49,9 +49,13 @@ dependencies.
     cd ember-cli
     npm link
 
-    # now you can use ember globally to create your project
-    ember new project_name
-    cd project_name
+    # now you can use ember globally to generate routes and such
+    ember g route new-route
+
+    # you can use this command to replace the node_module version of
+    # ember-cli installed via npm with the git version. run this in
+    # your project root, and only for your dev environment after
+    # npm install has already been run
     npm link ember-cli
     ```
     * _Note:_ Jenkins uses the local npm version
