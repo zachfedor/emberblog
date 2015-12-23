@@ -1,11 +1,25 @@
-<h2 style="text-transform: capitalize;">{{model.title}}</h2>
+<article>
+    <h2>{{model.title}}</h2>
 
-<p>
-    <span>{{model.author}}</span>
-     -
-    <span>{{model.date}}</span>
-</p>
+    <p>
+        <span>{{model.author}}</span>
+         -
+        <span>{{model.date}}</span>
+    </p>
 
-<p>
-    {{model.content}}
-</p>
+    <p>
+        {{model.content}}
+    </p>
+</article>
+
+<aside>
+    <h3>Comments</h3>
+
+    {{comment-new}}
+
+    <ol>
+    {{#each model.comments as |comment|}}
+        <li><b>{{comment.name}}:</b> {{comment.content}}</li>
+    {{/each}}
+    </ol>
+</aside>

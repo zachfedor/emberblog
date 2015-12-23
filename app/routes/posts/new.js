@@ -3,10 +3,14 @@ import Ember from 'ember';
 export default Ember.Route.extend({
     actions: {
         newPost(data) {
-            console.log('action bubbled');
-            console.log(data.title);
+            let self = this;
+
             let post = this.store.createRecord('post', data);
-            post.save();
+            post.date = new Date();
+            
+            post.save().then(() => {
+                self.transitionTo('posts.post', post);
+            });
         }
     }
 });
