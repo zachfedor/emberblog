@@ -1,5 +1,6 @@
 export default function() {
-    // this.get('/posts', ['posts', 'comments']);
+    const apiRoot = "http://localhost:4200";
+
     this.get('/posts', (db) => {
         let data = db.posts.map((attrs) => ({
             type: 'posts',
@@ -7,20 +8,12 @@ export default function() {
             attributes: attrs,
             relationships: {
                 comments: {
-                    data: []
+                    links: {
+                        related: apiRoot + '/posts/' + attrs.id + '/comments'
+                    }
                 }
             }
         }));
-
-        data.forEach((value) => {
-            console.log("post id: " + value.id);
-            let comments = db.comments.where({ post_id: value.id });
-            console.log("comments: " + comments.length);
-            let commentData = comments.map((attrs) => {
-                return { type: 'comments', id: attrs.id, attributes: attrs };
-            });
-            value.relationships.comments.data = commentData;
-        });
 
         return { data };
     });
@@ -28,6 +21,7 @@ export default function() {
     this.post('/posts', (db, request) => {
         var attrs = JSON.parse(request.requestBody).post;
         var post = db.posts.insert(attrs);
+
         let data = {
                 type: 'posts',
                 id: post.id,
@@ -39,36 +33,33 @@ export default function() {
 
     this.get('/posts/:id', (db, request) => {
         let post = db.posts.find(request.params.id);
-        let comments = db.comments.where({ post_id: post.id });
+
         let data = {
             type: 'posts',
             id: post.id,
             attributes: post,
             relationships: {
                 comments: {
-                    data: []
+                    links: {
+                        related: apiRoot + "/posts/" + request.params.id + "/comments"
+                    }
                 }
             }
         };
 
-        console.log("this posts' comments:");
-        console.log(comments);
-        let commentData = comments.map((attrs) => {
-            return { type: 'comments', id: attrs.id, attributes: attrs };
-        });
-        console.log(commentData);
-
-        data.relationships.comments.data = commentData;
-
         return { data };
     });
 
-    this.get('/comments', (db) => {
-        let data = db.comments.map(attrs => ({
-            type: 'comments',
-            id: attrs.id,
-            attributes: attrs
-        }));
+    this.get('/posts/:id/comments', (db, request) => {
+        let comments = db.comments.where({ post_id: request.params.id });
+
+        let data = comments.map((attrs) => {
+            return {
+                type: 'comments',
+                id: attrs.id,
+                attributes: attrs
+            };
+        });
 
         return { data };
     });
