@@ -64,13 +64,51 @@ export default function() {
         return { data };
     });
 
+    this.get('/comments', (db) => {
+        let data = db.comments.map((attrs) => ({
+            type: 'comments',
+            id: attrs.id,
+            attributes: attrs,
+            relationships: {
+                posts: {
+                    links: {
+                        related: apiRoot + '/posts/' + attrs.post_id
+                    }
+                }
+            }
+        }));
+
+        return { data };
+    });
+
+    this.post('/comments', (db, request) => {
+        let attrs = JSON.parse(request.requestBody).data.attributes;
+
+        let comment = db.comments.insert(attrs);
+
+        let data = {
+            type: 'comments',
+            id: comment.id,
+            attributes: comment
+        };
+
+        return { data };
+    });
+
     this.get('comments/:id', (db, request) => {
         let comment = db.comments.find(request.params.id);
 
         let data = {
             type: 'comments',
             id: comment.id,
-            attributes: comment
+            attributes: comment,
+            relationships: {
+                posts: {
+                    links: {
+                        related: apiRoot + '/posts/' + comment.post_id
+                    }
+                }
+            }
         };
 
         return { data };
